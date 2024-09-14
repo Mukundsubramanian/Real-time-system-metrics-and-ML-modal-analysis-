@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #1e1e2f;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #00d4ff;
+        }
+
+        table {
+            width: 90%;
+            max-width: 1200px;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #252539;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        thead {
+            background-color: #2d2d44;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            color: #00d4ff;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #3e3e55;
+            color: #b5b5c3;
+            font-size: 0.9rem;
+        }
+
+        tr:hover {
+            background-color: #31314b;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            th, td {
+                padding: 10px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Loader styling */
+        #loader {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            color: #00d4ff;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #00d4ff;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e1e2f;
+        }
+    </style>
+</head>
+<body>
+    <h1>System Processes</h1>
+    <div id="loader">Loading...</div>
+    <table id="processTable">
+        <thead>
+            <tr>
+                <th>PID</th>
+                <th>Name</th>
+                <th>CPU (%)</th>
+                <th>Memory (MB)</th>
+                <th>Disk Read (Bytes)</th>
+                <th>Disk Write (Bytes)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be populated here -->
+        </tbody>
+    </table>
+
+    <script>
+        async function fetchProcesses() {
+            try {
+                document.getElementById('loader').style.display = 'block'; // Show loader
+                const response = await fetch('/processes');
+                const processes = await response.json();
+                const tableBody = document.querySelector('#processTable tbody');
+                tableBody.innerHTML = '';
+
+                processes.forEach(proc => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${proc.pid}</td>
+                        <td>${proc.name}</td>
+                        <td>${proc.cpu_percent.toFixed(1)}%</td>
+                        <td>${proc.memory}</td>
+                        <td>${proc.disk_read.toLocaleString()}</td>
+                        <td>${proc.disk_write.toLocaleString()}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching processes:', error);
+            } finally {
+                document.getElementById('loader').style.display = 'none'; // Hide loader
+            }
+        }
+
+        // Fetch data every 5 seconds
+        setInterval(fetchProcesses, 5000);
+        fetchProcesses();
+    </script>
+</body>
+</html>

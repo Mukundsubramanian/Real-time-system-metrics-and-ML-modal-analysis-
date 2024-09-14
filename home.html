@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Monitor (Task Manager Clone)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #1e1e1e;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        .chart-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            width: 80%;
+            margin: 20px 0;
+        }
+        .chart-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #2e2e2e;
+            border: 1px solid #444;
+            margin: 10px;
+            padding: 10px;
+            width: 400px;
+        }
+        canvas {
+            background: #2e2e2e;
+            margin-top: 10px;
+        }
+        .info-box {
+            width: 100%;
+            margin-top: 10px;
+            background: #1e1e1e;
+            padding: 5px;
+            border: 1px solid #555;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <h1>System Monitor</h1>
+    <div class="chart-container">
+        <!-- CPU Usage -->
+        <div class="chart-box">
+            <canvas id="cpuChart" width="400" height="150"></canvas>
+            <div class="info-box" id="cpuInfo">
+                <div class="info-row"><span>Utilization:</span> <span>0%</span></div>
+                <div class="info-row"><span>Speed:</span> <span>0.00 GHz</span></div>
+                <div class="info-row"><span>Threads:</span> <span>0</span></div>
+            </div>
+        </div>
+        
+        <!-- Memory Usage -->
+        <div class="chart-box">
+            <canvas id="memoryChart" width="400" height="150"></canvas>
+            <div class="info-box" id="memoryInfo">
+                <div class="info-row"><span>Used:</span> <span>0 GB</span></div>
+                <div class="info-row"><span>Total:</span> <span>8 GB</span></div>
+                <div class="info-row"><span>Usage:</span> <span>0%</span></div>
+            </div>
+        </div>
+
+        <!-- Disk Usage -->
+        <div class="chart-box">
+            <canvas id="diskChart" width="400" height="150"></canvas>
+            <div class="info-box" id="diskInfo">
+                <div class="info-row"><span>Disk 1 (C:):</span> <span>0% used</span></div>
+                <div class="info-row"><span>Disk 0 (E:):</span> <span>0% used</span></div>
+            </div>
+        </div>
+
+        <!-- GPU Usage -->
+        <div class="chart-box">
+            <canvas id="gpuChart" width="400" height="150"></canvas>
+            <div class="info-box" id="gpuInfo">
+                <div class="info-row"><span>Utilization:</span> <span>0%</span></div>
+                <div class="info-row"><span>Memory Usage:</span> <span>0%</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to initialize the chart with random data
+        function createChart(canvasId, infoId, label) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const data = Array(60).fill(0); // Initial empty data
+            const infoBox = document.getElementById(infoId);
+
+            function updateData() {
+                // Simulate data update with random values
+                const newValue = Math.floor(Math.random() * 100);
+                data.shift();
+                data.push(newValue);
+                drawChart();
+                updateInfo(newValue);
+            }
+
+            function drawChart() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height - data[0]);
+                data.forEach((point, index) => {
+                    ctx.lineTo(index * (canvas.width / data.length), canvas.height - point);
+                });
+                ctx.strokeStyle = 'rgb(75, 192, 192)';
+                ctx.stroke();
+                ctx.font = '12px Arial';
+                ctx.fillStyle = '#fff';
+                ctx.fillText(label, 10, 20);
+            }
+
+            function updateInfo(value) {
+                // Update the information box with simulated values
+                if (infoId === 'cpuInfo') {
+                    infoBox.children[0].children[1].textContent = `${value}%`;
+                    infoBox.children[1].children[1].textContent = `${(1.2 + value / 100).toFixed(2)} GHz`;
+                    infoBox.children[2].children[1].textContent = `${1800 + value}`;
+                } else if (infoId === 'memoryInfo') {
+                    infoBox.children[0].children[1].textContent = `${(value * 0.08).toFixed(1)} GB`;
+                    infoBox.children[2].children[1].textContent = `${value}%`;
+                } else if (infoId === 'diskInfo') {
+                    infoBox.children[0].children[1].textContent = `${value}% used`;
+                    infoBox.children[1].children[1].textContent = `${Math.floor(value / 2)}% used`;
+                } else if (infoId === 'gpuInfo') {
+                    infoBox.children[0].children[1].textContent = `${value}%`;
+                    infoBox.children[1].children[1].textContent = `${Math.floor(value * 0.6)}%`;
+                }
+            }
+
+            setInterval(updateData, 1000); // Update every second
+        }
+
+        // Initialize charts and info boxes
+        createChart('cpuChart', 'cpuInfo', 'CPU Usage (%)');
+        createChart('memoryChart', 'memoryInfo', 'Memory Usage (%)');
+        createChart('diskChart', 'diskInfo', 'Disk Usage (%)');
+        createChart('gpuChart', 'gpuInfo', 'GPU Usage (%)');
+    </script>
+</body>
+</html>
