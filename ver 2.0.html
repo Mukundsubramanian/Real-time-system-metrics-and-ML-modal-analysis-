@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Metrics Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+<style>
+body {
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+background-color: #f0f0f0;
+}
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 20px;
+}
+.dashboard {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 20px;
+}
+.metric-card {
+background-color: white;
+border-radius: 8px;
+padding: 20px;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+h1, h2 {
+margin-top: 0;
+}
+canvas {
+max-width: 100%;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>System Metrics Dashboard</h1>
+<div class="dashboard">
+<div class="metric-card">
+<h2>CPU Usage</h2>
+<canvas id="cpuChart"></canvas>
+</div>
+<div class="metric-card">
+<h2>Memory Usage</h2>
+<canvas id="memoryChart"></canvas>
+</div>
+<div class="metric-card">
+<h2>Disk I/O</h2>
+<canvas id="diskChart"></canvas>
+</div>
+<div class="metric-card">
+<h2>Network Traffic</h2>
+<canvas id="networkChart"></canvas>
+</div>
+</div>
+</div>
+<script>
+// Function to create a line chart
+function createLineChart(canvasId, label, data) {
+const ctx = document.getElementById(canvasId).getContext('2d');
+return new Chart(ctx, {
+type: 'line',
+data: {
+labels: Array.from({length: data.length}, (_, i) => i + 1),
+datasets: [{
+label: label,
+data: data,
+borderColor: 'rgb(75, 192, 192)',
+tension: 0.1
+}]
+},
+options: {
+responsive: true,
+scales: {
+y: {
+beginAtZero: true
+}
+}
+}
+});
+}
+// Function to update chart data
+function updateChartData(chart, newData) {
+chart.data.labels.push(chart.data.labels.length + 1);
+chart.data.datasets[0].data.push(newData);
+if (chart.data.labels.length > 20) {
+chart.data.labels.shift();
+chart.data.datasets[0].data.shift();
+}
+chart.update();
+}
+// Initialize charts with dummy data
+const cpuChart = createLineChart('cpuChart', 'CPU Usage (%)', []);
+const memoryChart = createLineChart('memoryChart', 'Memory Usage (%)', []);
+const diskChart = createLineChart('diskChart', 'Disk I/O (MB/s)', []);
+const networkChart = createLineChart('networkChart', 'Network Traffic (MB/s)', []);
+// Function to fetch metrics from your backend
+async function fetchMetrics() {
+try {
+const response = await fetch('/api/metrics');
+const data = await response.json();
+return data;
+} catch (error) {
+console.error('Error fetching metrics:', error);
+return null;
+}
+}
+// Function to update dashboard
+async function updateDashboard() {
+const metrics = await fetchMetrics();
+if (metrics) {
+updateChartData(cpuChart, metrics.cpuUsage);
+updateChartData(memoryChart, metrics.memoryUsage);
+updateChartData(diskChart, metrics.diskIO);
+updateChartData(networkChart, metrics.networkTraffic);
+}
+}
+// Update dashboard every 5 seconds
+setInterval(updateDashboard, 5000);
+// Initial update
+updateDashboard();
+</script>
+</body>
+</html>
