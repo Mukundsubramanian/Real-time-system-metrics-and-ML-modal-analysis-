@@ -18,14 +18,12 @@ Real Time System Monitoring and ML modal Training Progress Visualisations for Hi
 
 Heres a sneak peak into what we made
 
-blob:https://web.whatsapp.com/0566202d-39bc-4ac3-8f80-58ef7e174940![image](https://github.com/user-attachments/assets/216eb4da-c177-400e-b36a-f9388280aaa1)
-blob:https://web.whatsapp.com/9a0e568a-14d1-46f1-9316-40bc7a7a029c![image](https://github.com/user-attachments/assets/aac284a7-5201-4a16-836e-796b5cdd52bd)
-blob:https://web.whatsapp.com/f33307ce-0d41-4ee4-a22d-396297e74f2f![image](https://github.com/user-attachments/assets/a9ec57b5-e4b6-4787-a2bf-94c747ba79cc)
-blob:https://web.whatsapp.com/fce82ab5-c6e9-4278-a888-4c1d28c281ff![image](https://github.com/user-attachments/assets/b8932dc0-c96b-43fd-b542-d2d19eeb0335)
-blob:https://web.whatsapp.com/16b05809-aec1-4243-bedb-1f15243fcf1f![image](https://github.com/user-attachments/assets/02921c42-8979-4e55-9836-9e5b52ffbd6f)
 
 
 
 
-
-
+![page1](https://github.com/user-attachments/assets/350e5691-2f87-4ca5-b3d3-4bcbb29d4d4d)
+![p2](https://github.com/user-attachments/assets/4f124b09-ce39-4899-a6bd-1cbffefde1c8)
+![p3](https://github.com/user-attachments/assets/2567af8a-ca1d-4638-a4a1-dd84b4b515d0)
+![p4](https://github.com/user-attachments/assets/cdc6e6e3-0886-43d4-8c52-8eef7869a425)
+![p5](https://github.com/user-attachments/assets/9f96a68f-6e06-4cb3-9aeb-932691ff4c6c)
