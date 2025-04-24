@@ -4,17 +4,19 @@ import time
 from datetime import datetime
 import psutil
 import sqlite3
+from backend.config import Config
 
 # CSV file configuration
 csv_file = 'live_log_dataset.csv'
 
-# Create an in-memory SQLite database
-conn = sqlite3.connect(':memory:')
+# Initialize database connection using config
+DATABASE_PATH = Config.SQLALCHEMY_DATABASE_URI.replace('sqlite:///', '')
+conn = sqlite3.connect(DATABASE_PATH)
 cursor = conn.cursor()
 
 # Create a table for storing logs
 cursor.execute('''
-    CREATE TABLE system_logs (
+    CREATE TABLE IF NOT EXISTS system_logs (
         timestamp TEXT,
         cpu REAL,
         gpu REAL,
@@ -28,12 +30,15 @@ def write_to_csv(file_name, data):
     """
     Write data to a CSV file.
     """
-    with open(file_name, mode='a', newline='') as file:
-        writer = csv.writer(file)
-        # Write headers only if the file is empty
-        if file.tell() == 0:
-            writer.writerow(['Timestamp', 'CPU', 'GPU', 'Memory_Usage', 'Data_In', 'Data_Out'])
-        writer.writerow(data)
+    try:
+        with open(file_name, mode='a', newline='') as file:
+            writer = csv.writer(file)
+            # Write headers only if the file is empty
+            if file.tell() == 0:
+                writer.writerow(['Timestamp', 'CPU', 'GPU', 'Memory_Usage', 'Data_In', 'Data_Out'])
+            writer.writerow(data)
+    except Exception as e:
+        print(f"Error writing to CSV file: {e}")
 
 def simulate_cpu_usage():
     """
@@ -65,11 +70,14 @@ def insert_into_database(data):
     """
     Insert log data into the SQLite database.
     """
-    cursor.execute('''
-        INSERT INTO system_logs (timestamp, cpu, gpu, memory_usage, data_in, data_out)
-        VALUES (?, ?, ?, ?, ?, ?)
-    ''', data)
-    conn.commit()
+    try:
+        cursor.execute('''
+            INSERT INTO system_logs (timestamp, cpu, gpu, memory_usage, data_in, data_out)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ''', data)
+        conn.commit()
+    except Exception as e:
+        print(f"Error inserting into database: {e}")
 
 def generate_live_logs(num_entries=10):
     """

@@ -1,0 +1,4 @@
+body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+nav { background: #222; color: #fff; padding: 1em; }
+.container { padding: 2em; }
+.main-content, .dashboard-container { margin: 2em auto; max-width: 900px; }

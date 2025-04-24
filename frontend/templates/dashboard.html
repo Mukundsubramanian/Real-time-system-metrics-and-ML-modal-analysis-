@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <h3>CPU Usage</h3>
+            <div id="cpu-chart"></div>
+        </div>
+        <div class="metric-card">
+            <h3>GPU Usage</h3>
+            <div id="gpu-chart"></div>
+        </div>
+        <div class="metric-card">
+            <h3>Memory Usage</h3>
+            <div id="memory-chart"></div>
+        </div>
+        <div class="metric-card">
+            <h3>Network Activity</h3>
+            <div id="network-chart"></div>
+        </div>
+    </div>
+
+    <div class="anomaly-section">
+        <h2>Anomaly Detection</h2>
+        <div id="anomaly-chart"></div>
+    </div>
+</div>
+
+<script>
+// Initialize charts
+const charts = {
+    cpu: Plotly.newPlot('cpu-chart', []),
+    gpu: Plotly.newPlot('gpu-chart', []),
+    memory: Plotly.newPlot('memory-chart', []),
+    network: Plotly.newPlot('network-chart', []),
+    anomaly: Plotly.newPlot('anomaly-chart', [])
+};
+
+// Function to update charts
+function updateCharts(data) {
+    // Update CPU chart
+    const cpuData = [{
+        x: data.timestamps,
+        y: data.cpu,
+        type: 'scatter'
+    }];
+    Plotly.update('cpu-chart', cpuData, {});
+
+    // Update GPU chart
+    const gpuData = [{
+        x: data.timestamps,
+        y: data.gpu,
+        type: 'scatter'
+    }];
+    Plotly.update('gpu-chart', gpuData, {});
+
+    // Update memory chart
+    const memoryData = [{
+        x: data.timestamps,
+        y: data.memory,
+        type: 'scatter'
+    }];
+    Plotly.update('memory-chart', memoryData, {});
+
+    // Update network chart
+    const networkData = [{
+        x: data.timestamps,
+        y: data.data_in,
+        name: 'Data In',
+        type: 'scatter'
+    }, {
+        x: data.timestamps,
+        y: data.data_out,
+        name: 'Data Out',
+        type: 'scatter'
+    }];
+    Plotly.update('network-chart', networkData, {});
+
+    // Update anomaly chart
+    const anomalyData = [{
+        x: data.timestamps,
+        y: data.anomaly_scores,
+        type: 'scatter'
+    }];
+    Plotly.update('anomaly-chart', anomalyData, {});
+}
+
+// Fetch and update data periodically
+setInterval(async () => {
+    try {
+        const response = await fetch('/api/metrics');
+        const data = await response.json();
+        updateCharts(data);
+    } catch (error) {
+        console.error('Error updating metrics:', error);
+    }
+}, 5000);
+</script>
+{% endblock %}
