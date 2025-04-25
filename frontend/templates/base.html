@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time System Metrics</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="[https://cdn.plot.ly/plotly-latest.min.js"></script>](https://cdn.plot.ly/plotly-latest.min.js"></script>)
+</head>
+<body>
+    <nav>
+        <div class="nav-brand">System Metrics Dashboard</div>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('main.index') }}">Home</a></li>
+            <li><a href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+            <li><a href="{{ url_for('main.upload') }}">Upload Data</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/frontend.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Metrics Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .metric-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            width: 280px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            text-align: center;
+        }
+        .metric-card h2 {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+        .metric-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .metric-card .label {
+            color: gray;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 45%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>System Metrics Dashboard</h1>
+        <div class="dashboard">
+            <div class="metric-card">
+                <h2>CPU Usage</h2>
+                <div class="value" id="cpuUsage">0%</div>
+                <div class="label">Utilization</div>
+            </div>
+            <div class="metric-card">
+                <h2>GPU Usage</h2>
+                <div class="value" id="gpuUsage">0%</div>
+                <div class="label">Utilization</div>
+            </div>
+            <div class="metric-card">
+                <h2>Memory Usage</h2>
+                <div class="value" id="memoryUsage">0%</div>
+                <div class="label">Used Memory</div>
+            </div>
+            <div class="metric-card">
+                <h2>HBM Usage</h2>
+                <div class="value" id="hbmUsage">0%</div>
+                <div class="label">High Bandwidth Memory</div>
+            </div>
+            <div class="metric-card">
+                <h2>Data In</h2>
+                <div class="value" id="dataIn">0 MB/s</div>
+                <div class="label">Network In</div>
+            </div>
+            <div class="metric-card">
+                <h2>Data Out</h2>
+                <div class="value" id="dataOut">0 MB/s</div>
+                <div class="label">Network Out</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to generate random values for system metrics (simulation)
+        function simulateMetrics() {
+            return {
+                cpu: Math.random() * 100, // CPU utilization in %
+                gpu: Math.random() * 100, // GPU utilization in %
+                memory: Math.random() * 100, // Memory usage in %
+                hbm: Math.random() * 100, // HBM usage in %
+                dataIn: Math.random() * 100, // Network data in (MB/s)
+                dataOut: Math.random() * 100 // Network data out (MB/s)
+            };
+        }
+
+        // Function to update the dashboard with simulated data
+        function updateDashboard() {
+            const metrics = simulateMetrics();
+
+            // Update the HTML content for each metric
+            document.getElementById('cpuUsage').textContent = metrics.cpu.toFixed(2) + '%';
+            document.getElementById('gpuUsage').textContent = metrics.gpu.toFixed(2) + '%';
+            document.getElementById('memoryUsage').textContent = metrics.memory.toFixed(2) + '%';
+            document.getElementById('hbmUsage').textContent = metrics.hbm.toFixed(2) + '%';
+            document.getElementById('dataIn').textContent = metrics.dataIn.toFixed(2) + ' MB/s';
+            document.getElementById('dataOut').textContent = metrics.dataOut.toFixed(2) + ' MB/s';
+        }
+
+        // Update the dashboard every second
+        setInterval(updateDashboard, 1000);
+    </script>
+    <div class="button-container">
+        <button onclick=location.href="https://claude.site/artifacts/4f253ebd-ae99-4abd-96c4-1839d57f1ab6">System Metrics</button>
+
+    </div>
+</body>
+</html>
